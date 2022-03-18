@@ -30,6 +30,10 @@ async def send_welcome(message: types.Message) -> None:
         f"[Спайк](https://en.wikipedia.org/wiki/List_of_The_Land_Before_Time_characters#Spike)",
         parse_mode="MarkdownV2"
     )
+
+def audio_convert():
+    pass
+
 @dp.message_handler(content_types=['voice', 'audio'])
 async def get_audio_messages(message: types.Message) -> None:
     """get audio from user and download to server .ogg file"""
@@ -40,7 +44,8 @@ async def get_audio_messages(message: types.Message) -> None:
     await bot.download_file(file_path, "voice.ogg")
     # get audio file from telegram 
 
-    # start new wfunction
+    # start new function
+
     subprocess.call(['ffmpeg', '-i', 'voice.ogg',
                    'voice.wav', '-y'])
     user_audio_file = sr.AudioFile("voice.wav")
