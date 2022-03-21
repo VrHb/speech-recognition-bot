@@ -1,5 +1,5 @@
 import os
-import subprocess
+import asyncio
 
 import speech_recognition as sr
 
@@ -19,6 +19,12 @@ logger.add(
 bot = Bot(token=(str(API_TOKEN)))
 dp = Dispatcher(bot)
 
+@logger.catch
+async def audio_convert(
+        program: str, flag1: str, file_out: str, flag2: str) -> None:
+    await asyncio.create_subprocess_exec(program, flag1, file_out, flag2)
+
+
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message) -> None:
     """
@@ -31,9 +37,6 @@ async def send_welcome(message: types.Message) -> None:
         parse_mode="MarkdownV2"
     )
 
-def audio_convert():
-    pass
-
 @dp.message_handler(content_types=['voice', 'audio'])
 async def get_audio_messages(message: types.Message) -> None:
     """get audio from user and download to server .ogg file"""
@@ -43,14 +46,15 @@ async def get_audio_messages(message: types.Message) -> None:
     file_path = file.file_path
     await bot.download_file(file_path, "voice.ogg")
     # get audio file from telegram 
-
+    await audio_convert(
+            program='ffmpeg', 
+            flag1='-i', 
+            file_out='voice.wav',
+            flag2='-y')
     # start new function
-
-    subprocess.call(['ffmpeg', '-i', 'voice.ogg',
-                   'voice.wav', '-y'])
     user_audio_file = sr.AudioFile("voice.wav")
     with user_audio_file as source:
-        user_audio = r.record(source)
+        user_audio = r.record(source, duration=6)
     text = r.recognize_google(user_audio, language='ru-RU')
     print(text)
     await message.answer(message.text)
