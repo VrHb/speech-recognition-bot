@@ -24,6 +24,7 @@ async def audio_recognition(file: str = ffmpeg.FILE_OUT) -> str:
     r = sr.Recognizer()
     user_audio_file = sr.AudioFile(file)
     with user_audio_file as source:
+        r.adjust_for_ambient_noise(source)
         user_audio = r.record(source)
     try:
         message_text = r.recognize_google(user_audio, language='ru-RU')
