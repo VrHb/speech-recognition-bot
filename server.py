@@ -2,7 +2,7 @@ import os
 from aiogram import Bot, Dispatcher, executor, types
 from loguru import logger
 
-from audio_file_operations import audio_convert, audio_recognition 
+from audio_file_operations import audio_convert, audio_recognition, ffmpeg 
 
 
 
@@ -32,12 +32,12 @@ async def send_welcome(message: types.Message) -> None:
 
 @dp.message_handler(content_types=['voice', 'audio'])
 async def get_audio_messages(message: types.Message) -> None:
-    """get audio from user and download to server .ogg file"""
+    """handle audio from user, transcribe and dend text answer"""
     file_id = message.voice.file_id
     file = await bot.get_file(file_id)
     file_path = file.file_path
     logger.info(file_path)
-    await bot.download_file(file_path, "voice.ogg")
+    await bot.download_file(file_path, ffmpeg.FILE_IN)
     await audio_convert()
     message_text = await audio_recognition()
     await message.answer(message_text)

@@ -2,6 +2,7 @@ FROM python:3.10
 
 WORKDIR /home
 
+
 ENV SPIKE_API_KEY="Your telegram API key here"
 
 COPY pip_requirements.txt ./

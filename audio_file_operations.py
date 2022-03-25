@@ -19,16 +19,15 @@ async def audio_convert() -> None:
     await process.wait()
 
 
-async def audio_recognition(file: str = ffmpeg.FILE_OUT) -> str:
+async def audio_recognition(file: str=ffmpeg.FILE_OUT) -> str:
     """Process recognize speech from audio file"""
     r = sr.Recognizer()
     user_audio_file = sr.AudioFile(file)
     with user_audio_file as source:
-        r.adjust_for_ambient_noise(source)
         user_audio = r.record(source)
     try:
         message_text = r.recognize_google(user_audio, language='ru-RU')
         return str(message_text)
     except sr.UnknownValueError:
-        return "Не понятно!"
+        return "РРРРррр!\nЧто-то невнятное! Еще разок ..."
 
