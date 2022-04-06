@@ -2,7 +2,7 @@ import asyncio
 
 import speech_recognition as sr
 
-class ffmpeg():
+class FFmpeg():
     PROGRAM = "ffmpeg"
     FLAG1 = '-i'
     FILE_IN = 'voice.ogg'
@@ -13,13 +13,13 @@ class ffmpeg():
 async def audio_convert() -> None:
     """Run the convert process by ffmpeg converter with asyncio subprocess"""
     process = await asyncio.create_subprocess_exec(
-            ffmpeg.PROGRAM, ffmpeg.FLAG1, 
-            ffmpeg.FILE_IN, ffmpeg.FILE_OUT, ffmpeg.FLAG2
+            FFmpeg.PROGRAM, FFmpeg.FLAG1, 
+            FFmpeg.FILE_IN, FFmpeg.FILE_OUT, FFmpeg.FLAG2
             )
     await process.wait()
 
 
-async def audio_recognition(file: str=ffmpeg.FILE_OUT) -> str:
+async def audio_recognition(file: str=FFmpeg.FILE_OUT) -> str:
     """Process recognize speech from audio file"""
     r = sr.Recognizer()
     user_audio_file = sr.AudioFile(file)
