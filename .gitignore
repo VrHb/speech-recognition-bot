@@ -1,5 +1,5 @@
 env/
-setenv.sh
+.env
 voice.*
 debug.log
 __pycache__/
