@@ -2,6 +2,7 @@ import asyncio
 
 import speech_recognition as sr
 
+
 class FFmpeg():
     PROGRAM = "ffmpeg"
     FLAG1 = '-i'

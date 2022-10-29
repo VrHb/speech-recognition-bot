@@ -1,9 +1,10 @@
 import os
+
 from aiogram import Bot, Dispatcher, executor, types
+from dotenv import load_dotenv
 from loguru import logger
 
-from audio_file_operations import audio_convert, audio_recognition, ffmpeg 
-
+from audio_file_operations import audio_convert, audio_recognition, FFmpeg 
 
 
 logger.add(
@@ -11,8 +12,8 @@ logger.add(
         level='DEBUG', serialize=True
         )
 
-API_TOKEN = os.getenv("SPIKE_API_KEY")
-
+load_dotenv()
+API_TOKEN = os.getenv("TGBOT_TOKEN")
 bot = Bot(token=(str(API_TOKEN)))
 dp = Dispatcher(bot)
 
@@ -37,7 +38,7 @@ async def get_audio_messages(message: types.Message) -> None:
     file = await bot.get_file(file_id)
     file_path = file.file_path
     logger.info(file_path)
-    await bot.download_file(file_path, ffmpeg.FILE_IN)
+    await bot.download_file(file_path, FFmpeg.FILE_IN)
     await audio_convert()
     message_text = await audio_recognition()
     await message.answer(message_text)
@@ -45,3 +46,4 @@ async def get_audio_messages(message: types.Message) -> None:
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
